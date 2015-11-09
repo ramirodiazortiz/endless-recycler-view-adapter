@@ -4,6 +4,7 @@ Basic endless recycler view implementation (preliminary version). Please feel fr
 1. Get the files
 2. Extends EndlessRecyclerViewAdapter and implement onCreateDataViewHolder and onBindDataViewHolder methods
 3. Add new EndlessRecyclerViewScrollListener to the recyclerView
+
   ```java
   recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener() {
             @Override
@@ -24,7 +25,11 @@ adapter.setLoadNextPageHandler(new EndlessRecyclerViewAdapter.LoadNextPageHandle
             }
         });
 ```        
-5. Do an async task and call adapter.loadingNextPageFinished(); when the task finishes
+5. Do an async task and call 
+```java 
+adapter.loadingNextPageFinished(); 
+```
+when the task finishes
 
 --------
 # Sample
