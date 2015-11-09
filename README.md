@@ -1,4 +1,4 @@
-# endlessrecyclerview
+# endlessrecyclerview - endless recycler view
 Basic endless recycler view implementation (preliminary version). Please feel free to contact me anytime you need: ramiro.do@gmail.com
 
 1. Get the files
