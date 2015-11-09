@@ -1,5 +1,5 @@
 # endlessrecyclerview
-Basic endless recycler view implementation (preliminary version)
+Basic endless recycler view implementation (preliminary version). Please feel free to contact me anytime you need: ramiro.do@gmail.com
 
 1. Get the files
 2. Extends EndlessRecyclerViewAdapter and implement onCreateDataViewHolder and onBindDataViewHolder methods
