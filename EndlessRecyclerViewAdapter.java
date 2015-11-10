@@ -12,7 +12,7 @@ public abstract class EndlessRecyclerViewAdapter<DVH extends RecyclerView.ViewHo
     private static final int TYPE_DATA = 0;
     private static final int TYPE_FOOTER = 1;
     private final LayoutInflater inflater;
-    private final ArrayList data;
+    protected final ArrayList data;
     private LoadNextPageHandler nextPageHandler;
 
     protected EndlessRecyclerViewAdapter(LayoutInflater inflater, ArrayList data) {
