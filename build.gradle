@@ -17,9 +17,6 @@ allprojects {
 //        maven {
 //            url "/Users/rdiaz/Projects"
 //        }
-        maven {
-            url  "http://dl.bintray.com/ramiro/android"
-        }
     }
 }
 
