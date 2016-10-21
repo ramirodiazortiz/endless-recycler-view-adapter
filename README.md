@@ -1,93 +1,139 @@
-# endlessrecyclerview - endless recycler view
-Basic endless recycler view implementation (preliminary version). Please feel free to contact me anytime you need: ramiro.do@gmail.com
+# endlessrecyclerviewadapter - endless recycler view adapter
+Basic endless recycler view adapter implementation. Please feel free to contact me anytime you need: ramiro.do@gmail.com
 
-1. Get the files
-2. Extends EndlessRecyclerViewAdapter and implement onCreateDataViewHolder and onBindDataViewHolder methods
-3. Add new EndlessRecyclerViewScrollListener to the recyclerView
+2. Configure gradle project file 
+  ```groovy
+  allprojects {
+    repositories {
+        jcenter()
+        maven {
+            url  "http://dl.bintray.com/ramiro/android"
+        }
+    }
+  }
+  ```
+
+2. Extends EndlessRecyclerViewAdapter and implement onCreateDataViewHolder, onBindDataViewHolder, onCreateFooterViewHolder and onBindFooterViewHolder methods.
+  ```java
+  @Override
+    public BasicAdapter.ViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
+        View view = this.inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindDataViewHolder(ViewHolder holder, int position) {
+        String item = this.data.get(position);
+        holder.text.setText(item);
+    }
+
+    @Override
+    public BasicAdapter.FooterViewHolder onCreateFooterViewHolder(ViewGroup parent, BasicAdapter.FooterViewHolder reusableFooterHolder) {
+        if (reusableFooterHolder == null) {
+            View view = inflater.inflate(R.layout.loading_footer_item, parent, false);
+            return new FooterViewHolder(view);
+        }
+        return reusableFooterHolder;
+    }
+
+    @Override
+    public void onBindFooterViewHolder(BasicAdapter.FooterViewHolder holder, int position) {
+        holder.text.setText("Loading from item " + String.valueOf(position));
+    }
+  ```
+3. Set EndlessRecyclerViewScrollListener to the recyclerView
 
   ```java
-  recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener() {
+  
+  this.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener() {
             @Override
             public void onScrolledToBottom() {
-                if (!isLastPageReached()) { //Whatever flag used to get if new page is available
-                    adapter.prepareToLoadNextPage();
-                }
+                MainActivity.this.adapter.showLoadingIndicator();
+                MainActivity.this.loadPage();
             }
-        });
-  ```
-4. Set LoadNextPageHandler in your adapter
-  
-  ```java
-adapter.setLoadNextPageHandler(new EndlessRecyclerViewAdapter.LoadNextPageHandler() {
+
             @Override
-            public void readyToLoadNextPage() {
-                getNextPage(); //Whatever you do to get a new page
+            public boolean endlessScrollEnabled() {
+                return !MainActivity.this.adapter.isRefreshing() && !MainActivity.this.server.lastPageReached(); //Your flag used to check if there are more pages available
+            }
+  });
+  ```
+  
+4. Do an async task and call addNewPage method
+```java 
+  private void loadPage() {
+        server.getNextPage(new CallbackHandler() {
+            @Override
+            public void onNewPage(final List page) {
+                MainActivity.this.adapter.addNewPage(page); //Call when the loading task finishes
             }
         });
-```        
-5. Do an async task and call 
-```java 
-adapter.loadingNextPageFinished(); 
+  }
 ```
-when the task finishes
 
 --------
 # Sample
 ```java
-public class SampleAdapter extends EndlessRecyclerViewAdapter {
-    public SampleAdapter(ArrayList list, Context context) {
-        super(LayoutInflater.from(context), list);
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.rdo.endlessrecyclerviewadapter.EndlessRecyclerViewAdapter;
+
+import java.util.ArrayList;
+
+public class BasicAdapter extends EndlessRecyclerViewAdapter<String, BasicAdapter.ViewHolder, BasicAdapter.FooterViewHolder> {
+
+    protected BasicAdapter(ArrayList data, Context context) {
+        super(data, context);
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
-        //To be implemented (add here the same as in onCreateViewHolder)
+    public BasicAdapter.ViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
+        View view = this.inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindDataViewHolder(RecyclerView.ViewHolder holder, int position) {
-        //To be implemented (add here the same as in onBindViewHolder)
+    public void onBindDataViewHolder(ViewHolder holder, int position) {
+        String item = this.data.get(position);
+        holder.text.setText(item);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public BasicAdapter.FooterViewHolder onCreateFooterViewHolder(ViewGroup parent, BasicAdapter.FooterViewHolder reusableFooterHolder) {
+        if (reusableFooterHolder == null) {
+            View view = inflater.inflate(R.layout.loading_footer_item, parent, false);
+            return new FooterViewHolder(view);
+        }
+        return reusableFooterHolder;
+    }
+
+    @Override
+    public void onBindFooterViewHolder(BasicAdapter.FooterViewHolder holder, int position) {
+        holder.text.setText("Loading from item " + String.valueOf(position));
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView text;
+
         public ViewHolder(View itemView) {
             super(itemView);
+            text = (TextView) itemView.findViewById(android.R.id.text1);
+        }
+    }
+
+    public class FooterViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView text;
+
+        public FooterViewHolder(View itemView) {
+            super(itemView);
+            text = (TextView) itemView.findViewById(R.id.footer_text);
         }
     }
 }
-```
-```java
-public class Fragment {
-    RecyclerView recyclerView;
-    private SampleAdapter adapter;
-    
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        .....
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener() {
-            @Override
-            public void onScrolledToBottom() {
-                if (!isLastPageReached()) { //Whatever flag to get if new page is available
-                    adapter.prepareToLoadNextPage();
-                }
-            }
-        });
-        getData();
-        return view;
-    }
 
-    private void getData() {
-        adapter = new CardBenefitAdapter(arrayList, this.getContext());
-        adapter.setLoadNextPageHandler(new EndlessRecyclerViewAdapter.LoadNextPageHandler() {
-            @Override
-            public void readyToLoadNextPage() {
-                getNextPage(); //Whatevet you do to get a new page
-            }
-        });
-        recyclerView.setAdapter(adapter);
-        ..Do an async task and call adapter.loadingNextPageFinished(); when the task finishes
-}
 ```
