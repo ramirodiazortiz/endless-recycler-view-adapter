@@ -8,9 +8,6 @@ Basic endless recycler view adapter implementation. Please feel free to contact 
   allprojects {
     repositories {
         jcenter()
-        maven {
-            url  "http://dl.bintray.com/ramiro/android"
-        }
     }
   }
   ```
