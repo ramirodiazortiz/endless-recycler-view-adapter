@@ -1,6 +1,8 @@
 # endlessrecyclerviewadapter - endless recycler view adapter
 Basic endless recycler view adapter implementation. Please feel free to contact me anytime you need: ramiro.do@gmail.com
 
+![](https://github.com/ramirodo/endless-recycler-view-adapter/blob/master/preview.gif)
+
 1.a Configure your gradle project file 
   ```groovy
   allprojects {
