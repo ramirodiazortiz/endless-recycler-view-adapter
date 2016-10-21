@@ -2,8 +2,8 @@
 
 [ ![Download](https://api.bintray.com/packages/ramiro/android/endless-recycler-view-adapter/images/download.svg) ](https://bintray.com/ramiro/android/endless-recycler-view-adapter/_latestVersion)
 
-`EndlessRecyclerViewAdapter` lets users to load new pages when scrolling down to the bottom of a recycler view list. 
-
+`EndlessRecyclerViewAdapter` lets users to load new pages when scrolling down to the bottom of a recyclerview list. 
+Both list item and footer are fully customizable.
 Please feel free to contact me anytime you need: ramiro.do@gmail.com
 
 ![](https://github.com/ramirodo/endless-recycler-view-adapter/blob/master/preview.gif)
