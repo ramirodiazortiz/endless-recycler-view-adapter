@@ -20,7 +20,7 @@ android {
     }
 }
 
-version = "1.0.0"
+version = "1.0.1"
 group = "com.rdo"
 
 def siteUrl = 'https://github.com/ramirodo/endless-recycler-view-adapter'
