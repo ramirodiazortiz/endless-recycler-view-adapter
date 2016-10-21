@@ -1,7 +1,7 @@
 # endlessrecyclerviewadapter - endless recycler view adapter
 Basic endless recycler view adapter implementation. Please feel free to contact me anytime you need: ramiro.do@gmail.com
 
-2. Configure gradle project file 
+1.a Configure your gradle project file 
   ```groovy
   allprojects {
     repositories {
@@ -12,7 +12,14 @@ Basic endless recycler view adapter implementation. Please feel free to contact 
     }
   }
   ```
-
+1.b Configure your gradle module file
+  ```groovy
+dependencies {
+   ...
+   compile 'com.rdo:endlessrecyclerviewadapter:1.0.1'
+}
+  ```
+  
 2. Extends EndlessRecyclerViewAdapter and implement onCreateDataViewHolder, onBindDataViewHolder, onCreateFooterViewHolder and onBindFooterViewHolder methods.
   ```java
   @Override
@@ -126,7 +133,6 @@ public class BasicAdapter extends EndlessRecyclerViewAdapter<String, BasicAdapte
     }
 
     public class FooterViewHolder extends RecyclerView.ViewHolder {
-
         private final TextView text;
 
         public FooterViewHolder(View itemView) {
